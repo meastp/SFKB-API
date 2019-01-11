@@ -114,6 +114,25 @@ paths:
         schema:
           type: integer
           format: int32
+      - name: read_write_exclusive
+        in: query
+        description: |
+          TODO: Pessimistisk låsing. 0 = false, 1 = true, ellers angir det en bestemt låsenøkkel
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: read_write_shared
+        in: query
+        description: |
+          TODO: Optimistisk låsing
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
       - name: bbox
         in: query
         description: |
@@ -203,6 +222,25 @@ paths:
         schema:
           type: integer
           format: int32
+      - name: read_write_exclusive
+        in: query
+        description: |
+          TODO: Pessimistisk låsing. 0 = false, 1 = true, ellers angir det en bestemt låsenøkkel
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: read_write_shared
+        in: query
+        description: |
+          TODO: Optimistisk låsing
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
       requestBody:
         description: Optional description in *Markdown*
         content:
