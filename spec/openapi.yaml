@@ -18,6 +18,8 @@ tags:
   description: Informasjon om dataset som brukeren har tilgang til
 - name: features
   description: Operasjoner på features i et bestemt dataset
+- name: locks
+  description: Behandling av features som brukeren har låst
 paths:
   /datasets:
     get:
@@ -59,6 +61,7 @@ paths:
       - Metadata
       summary: Hent metadata for et bestemt dataset
       description: Henter utvidet informasjon om et bestemt dataset. Her ligger all informasjon som kommer ut i listen over dataset, og i tillegg en del ekstra informasjon som enten er unødvendig eller for tung å ha med i listen over dataset.
+      operationId: getDatasetMetadata
       parameters:
       - name: datasetId
         in: path
@@ -178,6 +181,124 @@ paths:
       responses:
         200:
           description: OK
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /locks:
+    get:
+      tags:
+      - locks
+      summary: Hent liste over alle låser som brukeren har
+      description: Henter en liste over alle låser som brukeren har.
+      operationId: getAllLocks
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /locks/{datasetId}:
+    get:
+      tags:
+      - locks
+      summary: Hent informasjon om brukerens låste features i et bestemt dataset.
+      description: |
+        Henter bl.a. informasjon om hvilke objekter brukeren har låst i et bestemt dataset.
+      operationId: getLocksForDataset
+      parameters:
+      - name: datasetId
+        in: path
+        description: Numeric ID of the dataset to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - locks
+      summary: Fjerne alle låser brukeren har i et bestemt dataset
+      description: |
+        Fjerne alle låser brukeren har i et bestemt dataset
+      parameters:
+      - name: datasetId
+        in: path
+        description: Numeric ID of the dataset to delete locks in
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
         401:
           description: Unauthorized
           content:
