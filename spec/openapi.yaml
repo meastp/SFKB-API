@@ -293,12 +293,8 @@ paths:
           type: integer
           format: int32
       responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Dataset'
+        204:
+          description: No Content
         401:
           description: Unauthorized
           content:
