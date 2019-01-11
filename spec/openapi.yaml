@@ -32,7 +32,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Datasets'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
         401:
           description: Unauthorized
           content:
@@ -73,7 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Datasets'
+                $ref: '#/components/schemas/Dataset'
         401:
           description: Unauthorized
           content:
@@ -196,10 +198,38 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Datasets:
-      type: array
-      items:
-        $ref: '#/components/schemas/Datasets_inner'
+    Dataset:
+      required:
+      - bbox
+      - coordinate_reference_system
+      - id
+      - name
+      - read_only
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        kommune:
+          type: integer
+          format: int32
+        fylke:
+          type: integer
+          format: int32
+        sone:
+          type: integer
+          format: int32
+        resolution:
+          type: number
+          format: double
+        coordinate_reference_system:
+          type: string
+        read_only:
+          type: boolean
+        bbox:
+          $ref: '#/components/schemas/BoundingBox'
     BoundingBox:
       type: object
       properties:
@@ -226,32 +256,6 @@ components:
           type: string
         instance:
           type: string
-    Datasets_inner:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        kommune:
-          type: integer
-          format: int32
-        fylke:
-          type: integer
-          format: int32
-        sone:
-          type: integer
-          format: int32
-        resolution:
-          type: number
-          format: double
-        coordinate_reference_system:
-          type: string
-        read_only:
-          type: boolean
-        bbox:
-          $ref: '#/components/schemas/BoundingBox'
   responses:
     Unauthorized:
       description: Unauthorized
