@@ -249,7 +249,11 @@
 
     <h3 class="field-label">Query parameters</h3>
     <div class="field-items">
-      <div class="param">bbox (optional)</div>
+      <div class="param">read_write_exclusive (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; TODO: Pessimistisk låsing. 0 &#x3D; false, 1 &#x3D; true, ellers angir det en bestemt låsenøkkel format: int32</div>      <div class="param">read_write_shared (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; TODO: Optimistisk låsing </div>      <div class="param">bbox (optional)</div>
       
             <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; &lt;p&gt;Henter ut objekter i et bestemt område (angitt med et rektangel)&lt;/p&gt;
 &lt;p&gt;Dette kan være aktuelt for å få ut alle objekter som ikke er direkte knyttet til et objekt, som f.eks mønelinje og takkant til en bygning.&lt;/p&gt;
@@ -334,6 +338,13 @@
     </div>  <!-- field-items -->
 
 
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">read_write_exclusive (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; TODO: Pessimistisk låsing. 0 &#x3D; false, 1 &#x3D; true, ellers angir det en bestemt låsenøkkel format: int32</div>      <div class="param">read_write_shared (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; TODO: Optimistisk låsing </div>    </div>  <!-- field-items -->
 
 
 
