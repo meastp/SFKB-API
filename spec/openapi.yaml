@@ -116,15 +116,47 @@ paths:
           format: int32
       - name: bbox
         in: query
-        description: Bounding Box
+        description: |
+          Henter ut objekter i et bestemt område (angitt med et rektangel)
+
+          Dette kan være aktuelt for å få ut alle objekter som ikke er direkte knyttet til et objekt, som f.eks mønelinje og takkant til en bygning.
+
+          Eksempel: Hent ut et 10x10m rektangel
+
+          **TODO: Usikker på syntaks**
+
+          ?bbox=(10,10,20,20)
         required: false
         style: form
         explode: true
         schema:
           $ref: '#/components/schemas/BoundingBox'
-      - name: $filter
+      - name: query
         in: query
-        description: Filter på egenskaper (eksempel. identifikasjon.lokalid) eller objekttype for å begrense hvilke features som hentes ut
+        description: |
+          Filter på egenskaper og/eller objekttype for å begrense hvilke features som hentes ut.
+
+          Dersom objekttypen ikke skal begrenses, kan den angis med `*`
+
+          Eksempel: Hent en bygning med bestemt bygningsnummer
+
+          `?query=eq(Bygning/bygningsnummer,1234)`
+
+          Eksempel: Hent et objekt med bestemt lokalid
+
+          `?query=eq(*/identifikasjon/lokalid,000a7b9b-7088-482f-a3cf-9761b97a54b6)`
+
+          Merk: Når et objekt hentes ut med lokalid er det normalt ikke nødvendig å filtrere på objekttype, derfor er objekttypen angitt med `*`.
+
+          Merk: Spørringer er foreløpig begrenset til eksemplene over, nemlig spørringer etter bygningsnummer og lokalid.
+
+          Generell regel for egenskapsspørringer:
+
+          For å angi hvilken objekttype og hvilket attributt (full struktur med struct-/liste-egenskaper) det spørres etter, bruker vi
+
+          > \<objekttypenavn\>/\<attributtnavn\> [ / \<attributtnavn\> …]
+
+          Hvis vi ikke ønsker å begrense spørringen til en bestemt objekttype, kan vi angi * som <objekttypenavn>.
         required: false
         style: form
         explode: true
