@@ -251,9 +251,28 @@
     <div class="field-items">
       <div class="param">bbox (optional)</div>
       
-            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Bounding Box </div>      <div class="param">$filter (optional)</div>
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; &lt;p&gt;Henter ut objekter i et bestemt område (angitt med et rektangel)&lt;/p&gt;
+&lt;p&gt;Dette kan være aktuelt for å få ut alle objekter som ikke er direkte knyttet til et objekt, som f.eks mønelinje og takkant til en bygning.&lt;/p&gt;
+&lt;p&gt;Eksempel: Hent ut et 10x10m rektangel&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TODO: Usikker på syntaks&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;?bbox&#x3D;(10,10,20,20)&lt;/p&gt;
+ </div>      <div class="param">query (optional)</div>
       
-            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Filter på egenskaper (eksempel. identifikasjon.lokalid) eller objekttype for å begrense hvilke features som hentes ut </div>    </div>  <!-- field-items -->
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; &lt;p&gt;Filter på egenskaper og/eller objekttype for å begrense hvilke features som hentes ut.&lt;/p&gt;
+&lt;p&gt;Dersom objekttypen ikke skal begrenses, kan den angis med &lt;code&gt;*&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Eksempel: Hent en bygning med bestemt bygningsnummer&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;?query&#x3D;eq(Bygning/bygningsnummer,1234)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Eksempel: Hent et objekt med bestemt lokalid&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;?query&#x3D;eq(*/identifikasjon/lokalid,000a7b9b-7088-482f-a3cf-9761b97a54b6)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Merk: Når et objekt hentes ut med lokalid er det normalt ikke nødvendig å filtrere på objekttype, derfor er objekttypen angitt med &lt;code&gt;*&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Merk: Spørringer er foreløpig begrenset til eksemplene over, nemlig spørringer etter bygningsnummer og lokalid.&lt;/p&gt;
+&lt;p&gt;Generell regel for egenskapsspørringer:&lt;/p&gt;
+&lt;p&gt;For å angi hvilken objekttype og hvilket attributt (full struktur med struct-/liste-egenskaper) det spørres etter, bruker vi&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lt;objekttypenavn&amp;gt;/&amp;lt;attributtnavn&amp;gt; [ / &amp;lt;attributtnavn&amp;gt; …]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Hvis vi ikke ønsker å begrense spørringen til en bestemt objekttype, kan vi angi * som &lt;objekttypenavn&gt;.&lt;/p&gt;
+ </div>    </div>  <!-- field-items -->
 
 
     <h3 class="field-label">Return type</h3>
