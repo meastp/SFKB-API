@@ -309,7 +309,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Locks'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lock'
         401:
           description: Unauthorized
           content:
@@ -399,7 +401,7 @@ components:
           type: boolean
         bbox:
           $ref: '#/components/schemas/BoundingBox'
-    Locks:
+    Lock:
       type: object
       properties:
         id:
@@ -407,10 +409,11 @@ components:
           format: int32
         username:
           type: string
-        schema:
+        objects:
           type: array
           items:
-            $ref: '#/components/schemas/Locks_schema'
+            type: string
+            format: uuid
     BoundingBox:
       type: object
       properties:
@@ -473,13 +476,7 @@ components:
         dataset:
           type: string
         locks:
-          $ref: '#/components/schemas/Dataset'
-    Locks_schema:
-      type: object
-      properties:
-        lokalid:
-          type: string
-          format: uuid
+          $ref: '#/components/schemas/Lock'
   responses:
     Unauthorized:
       description: Unauthorized
