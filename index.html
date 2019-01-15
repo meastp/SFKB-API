@@ -207,6 +207,9 @@
     <div class="license-info">All rights reserved</div>
     <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
   <h2>Access</h2>
+    <ol>
+      <li>HTTP Basic Authentication</li>
+    </ol>
 
   <h2><a name="__Methods">Methods</a></h2>
   [ Jump to <a href="#__Models">Models</a> ]
@@ -249,7 +252,9 @@
 
     <h3 class="field-label">Query parameters</h3>
     <div class="field-items">
-      <div class="param">read_write_exclusive (optional)</div>
+      <div class="param">lock (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">read_write_exclusive (optional)</div>
       
             <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; TODO: Pessimistisk låsing. 0 &#x3D; false, 1 &#x3D; true, ellers angir det en bestemt låsenøkkel format: int32</div>      <div class="param">read_write_shared (optional)</div>
       
@@ -621,6 +626,7 @@
     <li><a href="#Locks"><code>Locks</code></a></li>
     <li><a href="#Locks_schema"><code>Locks_schema</code></a></li>
     <li><a href="#inline_response_200"><code>inline_response_200</code></a></li>
+    <li><a href="#lock"><code>lock</code></a></li>
   </ol>
 
   <div class="model">
@@ -679,6 +685,16 @@
     <div class="field-items">
       <div class="param">dataset (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">locks (optional)</div><div class="param-desc"><span class="param-type"><a href="#Dataset">Dataset</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="lock"><code>lock</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">user_lock</div><div class="param-enum">lock_id</div><div class="param-enum">optimistic_locking</div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
     </div>  <!-- field-items -->
   </div>
   </body>
