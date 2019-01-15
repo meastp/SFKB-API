@@ -118,30 +118,13 @@ paths:
           format: int32
       - name: lock
         in: query
+        description: |
+          TODO: Beskrive låsing
         required: false
         style: form
         explode: true
         schema:
           $ref: '#/components/schemas/lock'
-      - name: read_write_exclusive
-        in: query
-        description: |
-          TODO: Pessimistisk låsing. 0 = false, 1 = true, ellers angir det en bestemt låsenøkkel
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
-      - name: read_write_shared
-        in: query
-        description: |
-          TODO: Optimistisk låsing
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
       - name: bbox
         in: query
         description: |
@@ -231,25 +214,15 @@ paths:
         schema:
           type: integer
           format: int32
-      - name: read_write_exclusive
+      - name: lock
         in: query
         description: |
-          TODO: Pessimistisk låsing. 0 = false, 1 = true, ellers angir det en bestemt låsenøkkel
+          TODO: Beskrive låsing
         required: false
         style: form
         explode: true
         schema:
-          type: integer
-          format: int32
-      - name: read_write_shared
-        in: query
-        description: |
-          TODO: Optimistisk låsing
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
+          $ref: '#/components/schemas/lock_1'
       requestBody:
         description: Optional description in *Markdown*
         content:
@@ -465,6 +438,21 @@ components:
         instance:
           type: string
     lock:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - user_lock
+          - lock_id
+          - optimistic_locking
+        id:
+          minimum: 1
+          type: integer
+          format: int32
+    lock_1:
       required:
       - type
       type: object
