@@ -13,6 +13,8 @@ servers:
   description: SwaggerHub API Auto Mocking
 - url: http://sfkb.kartverket.no/v1
   description: Server hos Kartverket
+security:
+- basicAuth: []
 tags:
 - name: Metadata
   description: Informasjon om dataset som brukeren har tilgang til
@@ -114,6 +116,13 @@ paths:
         schema:
           type: integer
           format: int32
+      - name: lock
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/lock'
       - name: read_write_exclusive
         in: query
         description: |
@@ -455,6 +464,21 @@ components:
           type: string
         instance:
           type: string
+    lock:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - user_lock
+          - lock_id
+          - optimistic_locking
+        id:
+          minimum: 1
+          type: integer
+          format: int32
     inline_response_200:
       type: object
       properties:
@@ -487,3 +511,7 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
