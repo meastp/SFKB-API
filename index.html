@@ -438,7 +438,7 @@
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      <a href="#Locks">Locks</a>
+      array[<a href="#Lock">Lock</a>]
       
     </div>
 
@@ -456,7 +456,7 @@
     <h3 class="field-label">Responses</h3>
     <h4 class="field-label">200</h4>
     OK
-        <a href="#Locks">Locks</a>
+        
     <h4 class="field-label">401</h4>
     Unauthorized
         <a href="#Error">Error</a>
@@ -617,8 +617,7 @@
     <li><a href="#BoundingBox"><code>BoundingBox</code></a></li>
     <li><a href="#Dataset"><code>Dataset</code></a></li>
     <li><a href="#Error"><code>Error</code></a></li>
-    <li><a href="#Locks"><code>Locks</code></a></li>
-    <li><a href="#Locks_schema"><code>Locks_schema</code></a></li>
+    <li><a href="#Lock"><code>Lock</code></a></li>
     <li><a href="#inline_response_200"><code>inline_response_200</code></a></li>
     <li><a href="#lock"><code>lock</code></a></li>
     <li><a href="#lock_1"><code>lock_1</code></a></li>
@@ -659,19 +658,12 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="Locks"><code>Locks</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="Lock"><code>Lock</code></a> <a class="up" href="#__Models">Up</a></h3>
     
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
 <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">schema (optional)</div><div class="param-desc"><span class="param-type"><a href="#Locks_schema">array[Locks_schema]</a></span>  </div>
-    </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="Locks_schema"><code>Locks_schema</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
-    <div class="field-items">
-      <div class="param">lokalid (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">objects (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">array[UUID]</a></span>  format: uuid</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -679,7 +671,7 @@
     
     <div class="field-items">
       <div class="param">dataset (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">locks (optional)</div><div class="param-desc"><span class="param-type"><a href="#Dataset">Dataset</a></span>  </div>
+<div class="param">locks (optional)</div><div class="param-desc"><span class="param-type"><a href="#Lock">Lock</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
