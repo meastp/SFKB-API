@@ -1,24 +1,39 @@
 openapi: 3.0.0
 info:
-  title: Oppdateringsgresnsesnitt for SFKB
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  title: Oppdateringsgrensesnitt for SFKB
+  description: "Grov oversikt over funksjonalitet:\n  - Hente liste over tilgjengelige\
+    \ datasett \n  - Hente metadata for et bestemt datasett\n  - Hente data fra et\
+    \ bestemt datasett\n    - Med lesetilgang eller skrivetilgang (medfører låsing)\n\
+    \      - områdebegrensning\n      - egenskapsspørring (begrenset i første versjon\
+    \ til bygningsnummer eller lokalid)\n  - Lagre data til et bestemt datasett\n\
+    \    - Operasjoner som håndteres: nytt objekt, endre objekt og slett objekt\n"
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
   version: 1.0.0
 servers:
 - url: https://virtserver.swaggerhub.com/meastp/sfkb-update-api-draft/1.0.0
   description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/meastp/sfkb-api/1.0.0
+  description: SwaggerHub API Auto Mocking
 - url: http://sfkb.kartverket.no/v1
   description: Server hos Kartverket
+security:
+- basicAuth: []
 tags:
 - name: Metadata
   description: Informasjon om dataset som brukeren har tilgang til
 - name: features
   description: Operasjoner på features i et bestemt dataset
+- name: locks
+  description: Behandling av features som brukeren har låst
 paths:
   /datasets:
     get:
       tags:
       - Metadata
-      summary: Hent liste over alle dataset
+      summary: Hent liste over tilgjengelige dataset
       description: Henter en liste over alle dataset som brukeren har lese- eller skrivetilgang til.
       operationId: getDatasets
       responses:
@@ -27,7 +42,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Datasets'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
         401:
           description: Unauthorized
           content:
@@ -50,25 +67,26 @@ paths:
     get:
       tags:
       - Metadata
-      summary: Hent informasjon om et bestemt dataset
+      summary: Hent metadata for et bestemt dataset
       description: Henter utvidet informasjon om et bestemt dataset. Her ligger all informasjon som kommer ut i listen over dataset, og i tillegg en del ekstra informasjon som enten er unødvendig eller for tung å ha med i listen over dataset.
+      operationId: getDatasetMetadata
       parameters:
       - name: datasetId
         in: path
-        description: Numeric ID of the dataset to get
+        description: UUID of the dataset to get
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int32
+          type: string
+          format: uuid
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Datasets'
+                $ref: '#/components/schemas/Dataset'
         401:
           description: Unauthorized
           content:
@@ -97,24 +115,65 @@ paths:
       parameters:
       - name: datasetId
         in: path
-        description: Numeric ID of the dataset to get
+        description: UUID of the dataset to get
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int32
+          type: string
+          format: uuid
+      - name: lock
+        in: query
+        description: |
+          TODO: Beskrive låsing
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/lock'
       - name: bbox
         in: query
-        description: Bounding Box
+        description: |
+          Henter ut objekter i et bestemt område (angitt med et rektangel)
+
+          Dette kan være aktuelt for å få ut alle objekter som ikke er direkte knyttet til et objekt, som f.eks mønelinje og takkant til en bygning.
+
+          Eksempel: Hent ut et 10x10m rektangel
+
+          **TODO: Usikker på syntaks**
+
+          ?bbox=(10,10,20,20)
         required: false
         style: form
         explode: true
         schema:
           $ref: '#/components/schemas/BoundingBox'
-      - name: $filter
+      - name: query
         in: query
-        description: Filter på egenskaper (eksempel. identifikasjon.lokalid) eller objekttype for å begrense hvilke features som hentes ut
+        description: |
+          Filter på egenskaper og/eller objekttype for å begrense hvilke features som hentes ut.
+
+          Dersom objekttypen ikke skal begrenses, kan den angis med `*`
+
+          Eksempel: Hent en bygning med bestemt bygningsnummer
+
+          `?query=eq(Bygning/bygningsnummer,1234)`
+
+          Eksempel: Hent et objekt med bestemt lokalid
+
+          `?query=eq(*/identifikasjon/lokalid,000a7b9b-7088-482f-a3cf-9761b97a54b6)`
+
+          Merk: Når et objekt hentes ut med lokalid er det normalt ikke nødvendig å filtrere på objekttype, derfor er objekttypen angitt med `*`.
+
+          Merk: Spørringer er foreløpig begrenset til eksemplene over, nemlig spørringer etter bygningsnummer og lokalid.
+
+          Generell regel for egenskapsspørringer:
+
+          For å angi hvilken objekttype og hvilket attributt (full struktur med struct-/liste-egenskaper) det spørres etter, bruker vi
+
+          > \<objekttypenavn\>/\<attributtnavn\> [ / \<attributtnavn\> …]
+
+          Hvis vi ikke ønsker å begrense spørringen til en bestemt objekttype, kan vi angi * som <objekttypenavn>.
         required: false
         style: form
         explode: true
@@ -154,13 +213,22 @@ paths:
       parameters:
       - name: datasetId
         in: path
-        description: Numeric ID of the dataset to get
+        description: UUID of the dataset to get
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int32
+          type: string
+          format: uuid
+      - name: lock
+        in: query
+        description: |
+          TODO: Beskrive låsing
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/lock_1'
       requestBody:
         description: Optional description in *Markdown*
         content:
@@ -189,39 +257,130 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /locks:
+    get:
+      tags:
+      - locks
+      summary: Hent liste over alle låser som brukeren har
+      description: Henter en liste over alle låser som brukeren har.
+      operationId: getAllLocks
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /locks/{datasetId}:
+    get:
+      tags:
+      - locks
+      summary: Hent informasjon om brukerens låste features i et bestemt dataset.
+      description: |
+        Henter bl.a. informasjon om hvilke objekter brukeren har låst i et bestemt dataset.
+      operationId: getLocksForDataset
+      parameters:
+      - name: datasetId
+        in: path
+        description: UUID of the dataset to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locks'
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - locks
+      summary: Fjerne alle låser brukeren har i et bestemt dataset
+      description: |
+        Fjerne alle låser brukeren har i et bestemt dataset
+      operationId: deleteLocksForDataset
+      parameters:
+      - name: datasetId
+        in: path
+        description: UUID of the dataset to delete locks in
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        204:
+          description: No Content
+        401:
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The specified resource was not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Datasets:
-      type: array
-      items:
-        $ref: '#/components/schemas/Datasets_inner'
-    BoundingBox:
-      type: object
-      properties:
-        ll:
-          type: number
-          format: double
-        ur:
-          type: number
-          format: double
-    Error:
+    Dataset:
       required:
-      - title
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-          format: int32
-        detail:
-          type: string
-        instance:
-          type: string
-    Datasets_inner:
+      - bbox
+      - coordinate_reference_system
+      - id
+      - name
+      - read_only
       type: object
       properties:
         id:
@@ -247,6 +406,95 @@ components:
           type: boolean
         bbox:
           $ref: '#/components/schemas/BoundingBox'
+    Locks:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        username:
+          type: string
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locks_schema'
+    BoundingBox:
+      type: object
+      properties:
+        ll:
+          maxItems: 2
+          minItems: 2
+          type: array
+          items:
+            type: number
+            format: double
+        ur:
+          maxItems: 2
+          minItems: 2
+          type: array
+          items:
+            type: number
+            format: double
+    Error:
+      required:
+      - title
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+    lock:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - user_lock
+          - lock_id
+          - optimistic_locking
+        id:
+          minimum: 1
+          type: integer
+          format: int32
+    lock_1:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - user_lock
+          - lock_id
+          - optimistic_locking
+        id:
+          minimum: 1
+          type: integer
+          format: int32
+    inline_response_200:
+      type: object
+      properties:
+        dataset:
+          type: string
+        locks:
+          $ref: '#/components/schemas/Dataset'
+    Locks_schema:
+      type: object
+      properties:
+        lokalid:
+          type: string
+          format: uuid
   responses:
     Unauthorized:
       description: Unauthorized
@@ -266,3 +514,7 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
