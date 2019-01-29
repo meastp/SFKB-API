@@ -415,12 +415,13 @@ components:
         resolution: 0.001
         coordinate_reference_system: EPSG:5972
         access: read_write
-        ll:
-        - 10.0
-        - 100.0
-        ur:
-        - 20.0
-        - 200.0
+        bbox:
+          ll:
+          - 10.0
+          - 100.0
+          ur:
+          - 20.0
+          - 200.0
     Locks:
       type: object
       properties:
