@@ -431,10 +431,16 @@ components:
           format: int32
         username:
           type: string
-        schema:
+        features:
           type: array
           items:
-            $ref: '#/components/schemas/Locks_schema'
+            $ref: '#/components/schemas/Locks_features'
+      example:
+        id: 15003
+        username: joeuser
+        features:
+        - lokalid: 933f0223-2598-485b-b886-3c69650b22b0
+        - lokalid: ddb688c3-b2d9-47eb-93d2-cc4704b6394c
     BoundingBox:
       type: object
       properties:
@@ -512,8 +518,8 @@ components:
         dataset:
           type: string
         locks:
-          $ref: '#/components/schemas/Dataset'
-    Locks_schema:
+          $ref: '#/components/schemas/Locks'
+    Locks_features:
       type: object
       properties:
         lokalid:
