@@ -1,0 +1,10 @@
+type: array
+minItems: 4
+maxItems: 6
+items:
+  type: number
+example:
+  - 10
+  - 10
+  - 20
+  - 20

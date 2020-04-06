@@ -1,0 +1,25 @@
+get:
+  tags:
+    - metadata
+  summary: Hent liste over tilgjengelige dataset
+  description: >
+    Henter en liste over alle dataset som brukeren har lese- eller skrivetilgang
+    til. 
+
+    Dersom brukeren ikke har tilgang til noen dataset, returneres en tom liste.
+  operationId: getDatasets
+  parameters:
+    - $ref: ..\components\parameters\clientHeaderParam.yaml
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ..\components\schemas\Dataset.yaml
+    '401':
+      description: Gyldig autentisering av brukeren mangler eller er ugyldig
+    5XX:
+      description: Intern feil på serveren

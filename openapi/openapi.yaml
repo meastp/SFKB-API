@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Oppdateringsgrensesnitt for SFKB
+  description: |
+    Grov oversikt over funksjonalitet:
+      - Hente liste over tilgjengelige datasett 
+      - Hente metadata for et bestemt datasett
+      - Hente data fra et bestemt datasett
+        - Med lesetilgang eller skrivetilgang (medfører låsing)
+          - områdebegrensning
+          - egenskapsspørring (begrenset i første versjon til bygningsnummer eller lokalid)
+      - Lagre data til et bestemt datasett
+        - Operasjoner som håndteres: nytt objekt, endre objekt og slett objekt
+  contact:
+    name: SFKB Brukerstøtte
+    url: >-
+      https://www.kartverket.no/Prosjekter/Sentral-felles-kartdatabase/brukerstotte/
+servers:
+  - description: Test-server Norkart
+    url: 'https://qmsrest.westeurope.cloudapp.azure.com:8080/v1/'
+  - url: 'http://sfkb.kartverket.no/v1'
+    description: Server hos Kartverket
+security:
+  - basicAuth: []
+tags:
+  - name: metadata
+    description: Informasjon om dataset som brukeren har tilgang til
+  - name: features
+    description: Operasjoner på features i et bestemt dataset
+  - name: locks
+    description: Behandling av features som brukeren har låst
+paths:
+  /datasets:
+    $ref: paths\datasets.yaml
+  '/datasets/{datasetId}':
+    $ref: 'paths\datasets@{datasetId}.yaml'
+  '/datasets/{datasetId}/features':
+    $ref: 'paths\datasets@{datasetId}@features.yaml'
+  '/datasets/{datasetId}/features/{lokalId}':
+    $ref: 'paths\datasets@{datasetId}@features@{lokalId}.yaml'
+  '/datasets/{datasetId}/features/{lokalId}/attributes':
+    $ref: 'paths\datasets@{datasetId}@features@{lokalId}@attributes.yaml'
+  '/datasets/{datasetId}/locks':
+    $ref: 'paths\datasets@{datasetId}@locks.yaml'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Brukernavn og passord som er gyldige mot dataset som skal brukes. 
+        For QMS er dette brukernavn og passord mot oppgaven.

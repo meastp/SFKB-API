@@ -1,0 +1,157 @@
+get:
+  tags:
+    - features
+  summary: Hent ut features fra et dataset
+  description: >-
+    Henter en liste over alle dataset som brukeren har lese- eller skrivetilgang
+    til.
+  operationId: getDatasetFeatures
+  parameters:
+    - $ref: ..\components\parameters\clientHeaderParam.yaml
+    - $ref: ..\components\parameters\datasetIdParam.yaml
+    - $ref: ..\components\parameters\lockingParam.yaml
+    - $ref: ..\components\parameters\bboxParam.yaml
+    - in: query
+      name: query
+      schema:
+        type: string
+      description: >
+        Filter på egenskaper og/eller objekttype for å begrense hvilke features
+        som hentes ut.
+
+
+        Dersom objekttypen ikke skal begrenses, kan den angis med `*`
+
+
+        Eksempel: Hent en bygning med bestemt bygningsnummer
+
+
+        `?query=eq(Bygning/bygningsnummer,1234)`
+
+
+        Eksempel: Hent et objekt med bestemt lokalid
+
+
+        `?query=eq(*/identifikasjon/lokalid,000a7b9b-7088-482f-a3cf-9761b97a54b6)`
+
+
+        Merk: Når et objekt hentes ut med lokalid er det normalt ikke nødvendig
+        å filtrere på objekttype, derfor er objekttypen angitt med `*`.
+
+
+        Merk: Spørringer er foreløpig begrenset til eksemplene over, nemlig
+        spørringer etter bygningsnummer og lokalid.
+
+
+        Generell regel for egenskapsspørringer:
+
+
+        For å angi hvilken objekttype og hvilket attributt (full struktur med
+        struct-/liste-egenskaper) det spørres etter, bruker vi
+
+
+        > \<objekttypenavn\>/\<attributtnavn\> [ / \<attributtnavn\> …]
+
+
+        Hvis vi ikke ønsker å begrense spørringen til en bestemt objekttype, kan
+        vi angi * som <objekttypenavn>.
+  responses:
+    '200':
+      description: OK
+      content:
+        application/vnd.kartverket.sosi+json; version=1.0:
+          schema:
+            type: object
+          examples:
+            singlePoint:
+              description: eksempel på punkt
+              externalValue: >-
+                https://raw.githubusercontent.com/kartverket/SFKB-API/meastp_fix_examples/spec/examples/point/Bygning.json
+            singleLineString:
+              description: eksempel på linje
+              externalValue: >-
+                https://raw.githubusercontent.com/kartverket/SFKB-API/meastp_fix_examples/spec/examples/linestring/Mønelinje.json
+            singleArc:
+              description: >
+                eksempel på bue
+
+
+                Standarden GeoJSON har ingen egen type for bue. 
+
+
+                Det er derfor foreslått en håndtering der en kurve kan ha en
+                spesialegenskap som sier at denne kurven representerer en bue. 
+
+                Det skal også legges inn tilstrekkelig antall mellompunkt, slik
+                at applikasjoner som ikke kjenner spesialegenskapen får en
+                tilfredstillende representasjon av buen.   
+
+
+                TODO: Prinsipp for “stroking” av kurve? 
+              externalValue: >-
+                https://raw.githubusercontent.com/kartverket/SFKB-API/meastp_fix_examples/spec/examples/linestring/Mønelinje.json
+        application/vnd.kartverket.sosi+gml; version=1.0:
+          schema:
+            type: object
+          examples:
+            singlePoint:
+              description: eksempel på punkt
+              externalValue: >-
+                https://raw.githubusercontent.com/kartverket/SFKB-API/meastp_fix_examples/spec/examples/point/Bygning.xml
+            singleLineString:
+              description: eksempel på linje
+              externalValue: >-
+                https://raw.githubusercontent.com/kartverket/SFKB-API/meastp_fix_examples/spec/examples/linestring/Mønelinje.xml
+    '401':
+      description: Gyldig autentisering av brukeren mangler eller er ugyldig
+    '403':
+      description: Ugyldig brukernavn og/eller passord
+    '404':
+      description: Fant ikke angitt dataset
+    '406':
+      description: >-
+        Klienten har ugyldig Accept-header og kan ikke motta data på et format
+        som serveren kan levere
+    5XX:
+      description: Intern feil på serveren
+post:
+  tags:
+    - features
+  summary: Endre features i et dataset
+  description: >-
+    Henter en liste over alle dataset som brukeren har lese- eller skrivetilgang
+    til.
+  operationId: updateDatasetFeatures
+  parameters:
+    - $ref: ..\components\parameters\clientHeaderParam.yaml
+    - $ref: ..\components\parameters\datasetIdParam.yaml
+    - $ref: ..\components\parameters\lockingParam.yaml
+  requestBody:
+    description: Optional description in *Markdown*
+    required: true
+    content:
+      application/vnd.kartverket.sosi+wfs-t; version=1.0:
+        schema:
+          type: object
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              features_created:
+                type: integer
+              features_replaced:
+                type: integer
+              features_erased:
+                type: integer
+    '401':
+      description: Gyldig autentisering av brukeren mangler eller er ugyldig
+    '403':
+      description: Ugyldig brukernavn og/eller passord
+    '404':
+      description: Fant ikke angitt dataset
+    5XX:
+      description: Intern feil på serveren

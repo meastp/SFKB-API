@@ -1,0 +1,45 @@
+get:
+  tags:
+    - locks
+  summary: Hent informasjon om brukerens låste features i et bestemt dataset.
+  description: >
+    Henter bl.a. informasjon om hvilke objekter brukeren har låst i et bestemt
+    dataset.
+  operationId: getDatasetLocks
+  parameters:
+    - $ref: ..\components\parameters\clientHeaderParam.yaml
+    - $ref: ..\components\parameters\datasetIdParam.yaml
+    - $ref: ..\components\parameters\lockingParam.yaml
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Locks.yaml
+    '401':
+      description: Gyldig autentisering av brukeren mangler eller er ugyldig
+    '403':
+      description: Ugyldig brukernavn og/eller passord
+    '404':
+      description: Fant ikke angitt dataset
+delete:
+  tags:
+    - locks
+  summary: Fjerne alle låser brukeren har i et bestemt dataset
+  description: |
+    Fjerne alle låser brukeren har i et bestemt dataset
+  operationId: deleteDatasetLocks
+  parameters:
+    - $ref: ..\components\parameters\clientHeaderParam.yaml
+    - $ref: ..\components\parameters\datasetIdParam.yaml
+    - $ref: ..\components\parameters\lockingParam.yaml
+  responses:
+    '204':
+      description: No Content
+    '401':
+      description: Gyldig autentisering av brukeren mangler eller er ugyldig
+    '403':
+      description: Ugyldig brukernavn og/eller passord
+    '404':
+      description: Fant ikke angitt dataset

@@ -1,0 +1,22 @@
+type: array
+items:
+  type: object
+  properties:
+    id:
+      type: integer
+    username:
+      type: string
+    features:
+      type: array
+      items:
+        type: object
+        properties:
+          lokalid:
+            type: string
+            format: uuid
+example:
+  - id: 15003
+    username: joeuser
+    features:
+      - lokalid: 933f0223-2598-485b-b886-3c69650b22b0
+      - lokalid: ddb688c3-b2d9-47eb-93d2-cc4704b6394c

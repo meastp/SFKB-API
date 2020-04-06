@@ -1,0 +1,8 @@
+in: path
+name: datasetId
+schema:
+  type: string
+  format: uuid
+required: true
+description: UUID of the dataset to get
+example: dc3507da-a95f-4482-b762-f140f5a11788

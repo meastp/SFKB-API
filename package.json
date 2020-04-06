@@ -1,0 +1,13 @@
+{
+  "name": "oppdateringsgrensesnitt-for-sfkb",
+  "version": "1.0.0",
+  "dependencies": {
+    "@redocly/openapi-cli": "^0.11.0"
+  },
+  "private": true,
+  "scripts": {
+    "start": "openapi preview-docs",
+    "build": "openapi bundle -o dist",
+    "test": "openapi validate"
+  }
+}

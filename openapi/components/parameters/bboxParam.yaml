@@ -1,0 +1,20 @@
+in: query
+name: bbox
+style: form
+explode: false
+schema:
+  $ref: ..\schemas\BoundingBox.yaml
+examples:
+  smallbbox:
+    summary: Et 10x10m vindu
+    value:
+      - 10
+      - 100
+      - 20
+      - 200
+description: >
+  Henter ut objekter i et bestemt område (angitt med et rektangel)
+
+
+  Dette kan være aktuelt for å få ut alle objekter som ikke er direkte knyttet
+  til et objekt, som f.eks mønelinje og takkant til en bygning.

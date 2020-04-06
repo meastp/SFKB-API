@@ -1,0 +1,5 @@
+type: http
+scheme: basic
+description: |
+  Brukernavn og passord som er gyldige mot dataset som skal brukes. 
+  For QMS er dette brukernavn og passord mot oppgaven.

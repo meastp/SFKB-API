@@ -1,0 +1,7 @@
+in: path
+name: lokalId
+schema:
+  type: string
+  format: uuid
+required: true
+description: Identifikasjon.Lokalid til objektet

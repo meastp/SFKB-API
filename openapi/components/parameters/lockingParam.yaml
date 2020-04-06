@@ -1,0 +1,38 @@
+in: query
+name: locking
+style: deepObject
+explode: true
+schema:
+  type: object
+  properties:
+    type:
+      type: string
+      enum:
+        - user_lock
+        - lock_id
+        - optimistic_locking
+    id:
+      type: integer
+      minimum: 1
+  required:
+    - type
+description: >
+  Angir låsetype som skal brukes for å hente ut objekter for oppdatering. Krever
+  at brukeren har skrivetilgang mot dataset'et.
+
+
+  *user_lock*
+
+
+  Hver bruker har én lås per dataset. Hver gang data hentes ut med `user_lock`
+  legges objektene til denne låsen. 
+
+  Alle objekter i låsen låses opp neste gang brukeren skriver data til
+  dataset'et.
+
+
+  Foreløpig er det kun brukerlås (`user_lock`) som støttes. Kallet legger da til
+  objekter i brukerlåsen. 
+
+  Låsen vil fjernes neste gang brukeren skriver data til dataset'et, eller
+  dersom låsen slettes.

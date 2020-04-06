@@ -1,0 +1,6 @@
+in: header
+name: X-Client-Product-Version
+schema:
+  type: string
+required: true
+example: ExampleApp 10.0.0 (Build 54321)
